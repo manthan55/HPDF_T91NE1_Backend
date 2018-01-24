@@ -118,9 +118,9 @@ password:
 # Configuration for facebook provider
 facebook:
 #  # your facebook app client id
-  clientId: "1955148308138453"
+  clientId: "1578440922251720"
 #  # your facebook app client secret
-  clientSecret: "d3678d5520b13d2e3c59080c3e245358"
+  clientSecret: "d8b32352842042db43d3a4c2193da6ec"
 #
 # Configuration for github provider
 #github:
