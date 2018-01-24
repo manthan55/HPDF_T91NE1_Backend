@@ -30,7 +30,7 @@ defaultProviders:
     enabled: "false"
     defaultRoles: []
   facebook:
-    enabled: "false"
+    enabled: "true"
     defaultRoles: []
   github:
     enabled: "false"
@@ -116,14 +116,11 @@ password:
 #  clientIds: ["xxxxxx", "yyyyyy"]
 #
 # Configuration for facebook provider
-#facebook:
+facebook:
 #  # your facebook app client id
-#  clientId: xxxxxxxxx
+  clientId: "1955148308138453"
 #  # your facebook app client secret
-#  clientSecret:
-#    secretKeyRef:
-#      key: auth.facebook.client.secret
-#      name: hasura-secrets
+  clientSecret: "d3678d5520b13d2e3c59080c3e245358"
 #
 # Configuration for github provider
 #github:

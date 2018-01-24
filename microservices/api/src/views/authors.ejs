@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Authors EJS</title>
+		<script type="text/javascript" src="authors.js"></script>
+		<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<h2><%=title%> &nbsp|&nbsp <%=authors.length%> entrie(s)</h2>
+		<ul>
+			<% for(var i=0; i<authors.length; i++){ %>
+				<li><p name=<%=authors[i].id%> class="authors"><b><%=authors[i].name%></b></p></li>
+			<% } %>
+		</ul>
+		<hr/>
+		<button onclick="window.location='/'">Home</button>
+	</body>
+</html>
+
+
+
+
+
