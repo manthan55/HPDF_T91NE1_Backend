@@ -14,7 +14,11 @@ app.get('/', function(req, res) {
 });
 
 app.get('/r', function (req, res) {
-	res.render('deny');
+	res.render('index');
+});
+
+app.get('/FacebookSDK.js', function (req, res) {
+  res.sendFile(path.join(__dirname, 'views', 'FacebookSDK.js'));
 });
 
 // Uncomment to add a new route which returns hello world as a JSON
