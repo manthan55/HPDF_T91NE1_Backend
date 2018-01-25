@@ -41,7 +41,7 @@ window.fbAsyncInit = function() {
        } else {
          console.log("You are not logged into Facebook");
        }
-     });
+     }, {scope: 'email'});
    }
 
    function getInfo() {
