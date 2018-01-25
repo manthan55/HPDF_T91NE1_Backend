@@ -1,0 +1,7 @@
+- args:
+    sql: CREATE TABLE "fb_users"("hasura_id" integer NOT NULL, "fb_id" integer NOT
+      NULL, "name" text NOT NULL, PRIMARY KEY ("hasura_id") )
+  type: run_sql
+- args:
+    name: fb_users
+  type: add_existing_table_or_view
