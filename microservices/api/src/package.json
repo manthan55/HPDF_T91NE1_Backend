@@ -9,6 +9,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.2",
+    "body-parser": "*",
     "ejs": "^2.5.7",
     "node-fetch": "^1.7.3"
   }

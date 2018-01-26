@@ -1,3 +1,7 @@
+window.onload = function(){
+  window.jQuery ? console.log('jQuery is loaded') : console.log('jQuery is not loaded');
+}
+
 window.fbAsyncInit = function() {
   FB.init({
     appId      : '1578440922251720',
@@ -17,7 +21,6 @@ window.fbAsyncInit = function() {
    js.src = "https://connect.facebook.net/en_US/sdk.js";
    fjs.parentNode.insertBefore(js, fjs);
  }(document, 'script', 'facebook-jssdk'));
- console.log("loaded!");
 
  function checkLoginState() {
      FB.getLoginStatus(function(response) {
@@ -36,6 +39,8 @@ window.fbAsyncInit = function() {
      FB.login(function(response){
        if(response.status === "connected"){
          console.log("We are connected!");
+         console.log(response);
+        //window.location="http://localhost:8080/signup/"+response.authResponse.accessToken+"";
        } else if(response.status === "not_authorized"){
          console.log("We are not connected!");
        } else {
@@ -49,3 +54,53 @@ window.fbAsyncInit = function() {
 				console.log(response);
 			});
 		}
+
+    function sendAuth(){
+      $.ajax({
+      	url: "https://api.burled79.hasura-app.io/signup1",
+      	contentType: "application/json",
+      	data: JSON.stringify({
+            "data": {
+                  "access_token": "EAAWblWp4QcgBADxRYmuIwuwOfi4NEIDAb6a3MsyDalNOPNa5L9FzBfrgQuezaHXkTC2wxJnZAqfKSTOBJQCRqMZArwxDxJuFA12HAmLfFMlmfPo0CeaQncm2IwA6b04iEzliKpP2Jwvp8cLBMCH3d81YLMn5AFgduTeLYyHJpr6M6A4KX69Gv4fLOod2axRKTdUfpmugZDZD"
+            }
+      	}),
+      	type: "POST",
+      	dataType: "json"
+      }).done(function(json) {
+      	// Handle Response
+      	// To save the auth token received to offline storage
+      	// var authToken = result.auth_token
+      	// window.localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
+        console.log("sent!");
+        console.log(json);
+      }).fail(function(xhr, status, errorThrown) {
+      	console.log("Error: " + errorThrown);
+      	console.log("Status: " + status);
+      	console.dir(xhr);
+      });
+    }
+
+    function postReq(){
+      $.ajax({
+      	url: "https://auth.burled79.hasura-app.io/v1/signup",
+      	contentType: "application/json",
+      	data: JSON.stringify({
+            "provider": "facebook",
+            "data": {
+                  "access_token": "EAAWblWp4QcgBADxRYmuIwuwOfi4NEIDAb6a3MsyDalNOPNa5L9FzBfrgQuezaHXkTC2wxJnZAqfKSTOBJQCRqMZArwxDxJuFA12HAmLfFMlmfPo0CeaQncm2IwA6b04iEzliKpP2Jwvp8cLBMCH3d81YLMn5AFgduTeLYyHJpr6M6A4KX69Gv4fLOod2axRKTdUfpmugZDZD"
+            }
+      	}),
+      	type: "POST",
+      	dataType: "json"
+      }).done(function(json) {
+      	// Handle Response
+      	// To save the auth token received to offline storage
+      	// var authToken = result.auth_token
+      	// window.localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
+        console.log(json);
+      }).fail(function(xhr, status, errorThrown) {
+      	console.log("Error: " + errorThrown);
+      	console.log("Status: " + status);
+      	console.dir(xhr);
+      });
+    }
