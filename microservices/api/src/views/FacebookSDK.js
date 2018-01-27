@@ -40,7 +40,7 @@ window.fbAsyncInit = function() {
        if(response.status === "connected"){
          console.log("We are connected!");
          console.log(response);
-        //window.location="http://localhost:8080/signup/"+response.authResponse.accessToken+"";
+         window.location="http://localhost:8080/auth/"+response.authResponse.accessToken+"";
        } else if(response.status === "not_authorized"){
          console.log("We are not connected!");
        } else {
@@ -49,36 +49,34 @@ window.fbAsyncInit = function() {
      }, {scope: 'email'});
    }
 
+   function Logout(){
+     window.location="http://localhost:8080/logout";
+   }
+
+   function Logout_client(){
+     $.ajax({
+    	url: "https://auth.burled79.hasura-app.io/v1/user/logout",
+    	contentType: "application/json",
+    	headers: {
+          "Authorization": "Bearer "
+    	},
+    	data: JSON.stringify(null),
+    	type: "POST",
+    	dataType: "json"
+    }).done(function(json) {
+    	// Handle Response
+    }).fail(function(xhr, status, errorThrown) {
+    	console.log("Error: " + errorThrown);
+    	console.log("Status: " + status);
+    	console.dir(xhr);
+    });
+   }
+
    function getInfo() {
 			FB.api('/me', 'GET', {fields: 'first_name,last_name,name,id'}, function(response) {
 				console.log(response);
 			});
 		}
-
-    function sendAuth(){
-      $.ajax({
-      	url: "https://api.burled79.hasura-app.io/signup1",
-      	contentType: "application/json",
-      	data: JSON.stringify({
-            "data": {
-                  "access_token": "EAAWblWp4QcgBADxRYmuIwuwOfi4NEIDAb6a3MsyDalNOPNa5L9FzBfrgQuezaHXkTC2wxJnZAqfKSTOBJQCRqMZArwxDxJuFA12HAmLfFMlmfPo0CeaQncm2IwA6b04iEzliKpP2Jwvp8cLBMCH3d81YLMn5AFgduTeLYyHJpr6M6A4KX69Gv4fLOod2axRKTdUfpmugZDZD"
-            }
-      	}),
-      	type: "POST",
-      	dataType: "json"
-      }).done(function(json) {
-      	// Handle Response
-      	// To save the auth token received to offline storage
-      	// var authToken = result.auth_token
-      	// window.localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
-        console.log("sent!");
-        console.log(json);
-      }).fail(function(xhr, status, errorThrown) {
-      	console.log("Error: " + errorThrown);
-      	console.log("Status: " + status);
-      	console.dir(xhr);
-      });
-    }
 
     function postReq(){
       $.ajax({
