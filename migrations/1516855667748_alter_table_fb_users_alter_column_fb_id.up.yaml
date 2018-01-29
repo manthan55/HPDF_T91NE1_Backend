@@ -1,9 +1,0 @@
-- args:
-    sql: ALTER TABLE "fb_users" ALTER COLUMN "fb_id" TYPE bigint;
-  type: run_sql
-- args:
-    sql: ALTER TABLE "fb_users" ALTER COLUMN "fb_id" DROP DEFAULT;
-  type: run_sql
-- args:
-    sql: ALTER TABLE "fb_users" ALTER COLUMN "fb_id" SET NOT NULL;
-  type: run_sql

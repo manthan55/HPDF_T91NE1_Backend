@@ -27,7 +27,7 @@ app.set('views',path.join(__dirname,'views'));
 var url_signup = "https://auth.burled79.hasura-app.io/v1/signup";
 var url_login = "https://auth.burled79.hasura-app.io/v1/login";
 var url_logout = "https://auth.burled79.hasura-app.io/v1/user/logout";
-var url_query = "https://data.bleed71.hasura-app.io/v1/query";
+var url_query = "https://data.burled79.hasura-app.io/v1/query";
 ///////////////////////
 
 
