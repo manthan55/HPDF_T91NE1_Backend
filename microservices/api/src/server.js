@@ -95,7 +95,8 @@ function UpdateLikesTable(like_user_id, likeby_user_id, res){
   var requestOptions = {
     "method": "POST",
     "headers": {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "Bearer b6236ecfc217c9ba326d363560d774d5737e78f24532673c"
     }
   };
 
