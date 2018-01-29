@@ -80,7 +80,9 @@ app.get('/JCode.js', function (req, res) {
 app.post('/APIEP', function(req, res){
   var like_user_id = req.body.name;
   var likeby_user_id = req.body.email;
+  console.log("calling update tabl e");
   if(isNumber(like_user_id) && isNumber(likeby_user_id)){
+    console.log("calling update table");
     UpdateLikesTable(like_user_id, likeby_user_id, res);
   } else {
     res.send("One or more inputs is invalid (Should be numbers)");
@@ -89,6 +91,7 @@ app.post('/APIEP', function(req, res){
 ///////////////////////////////////////////////////////////////
 
 function UpdateLikesTable(like_user_id, likeby_user_id, res){
+  console.log(url_query);
   var requestOptions = {
     "method": "POST",
     "headers": {
@@ -99,11 +102,11 @@ function UpdateLikesTable(like_user_id, likeby_user_id, res){
   var body = {
       "type": "insert",
       "args": {
-          "table": "Likes_SuperLikes",
+          "table": "Likes",
           "objects": [
               {
-                  "User_id": like_user_id,
-                  "Likes_User_id": likeby_user_id
+                  "like_user_id": like_user_id,
+                  "likeby_user_id": likeby_user_id
               }
           ]
       }
@@ -117,7 +120,6 @@ function UpdateLikesTable(like_user_id, likeby_user_id, res){
   })
   .then(function(result) {
   	console.log(JSON.stringify(result));
-    res.send("Done");
   })
   .catch(function(error) {
   	console.log('Request Failed:' + error);
