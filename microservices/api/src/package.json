@@ -8,10 +8,11 @@
   "author": "Jaison",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.2",
     "body-parser": "*",
+    "cookie-parser": "^1.4.3",
     "ejs": "^2.5.7",
-    "node-fetch": "^1.7.3",
-    "cookie-parser": "^1.4.3"
+    "express": "^4.16.2",
+    "is-number": "^5.0.0",
+    "node-fetch": "^1.7.3"
   }
 }
