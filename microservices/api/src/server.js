@@ -77,12 +77,10 @@ app.get('/JCode.js', function (req, res) {
 
 
 //////////////////     API Endpoints     //////////////////////
-app.post('/APIEP', function(req, res){
+app.post('/APIEP_Likes', function(req, res){
   var like_user_id = req.body.name;
   var likeby_user_id = req.body.email;
-  console.log("calling update tabl e");
   if(isNumber(like_user_id) && isNumber(likeby_user_id)){
-    console.log("calling update table");
     UpdateLikesTable(like_user_id, likeby_user_id, res);
   } else {
     res.send("One or more inputs is invalid (Should be numbers)");
@@ -90,6 +88,8 @@ app.post('/APIEP', function(req, res){
 });
 ///////////////////////////////////////////////////////////////
 
+
+//////////////////////    Hasura API Calls    //////////////////////////
 function UpdateLikesTable(like_user_id, likeby_user_id, res){
   console.log(url_query);
   var requestOptions = {
@@ -121,11 +121,12 @@ function UpdateLikesTable(like_user_id, likeby_user_id, res){
   })
   .then(function(result) {
   	console.log(JSON.stringify(result));
+    res.send(result);
   })
   .catch(function(error) {
   	console.log('Request Failed:' + error);
   });
-  res.send("done!");
+  res.send("API Call successfull");
 }
 
 
