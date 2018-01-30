@@ -7,13 +7,50 @@
 	</head>
 	<body>
 		<div>
-			<h1>HPDF - T91NE1   ||   APIEP - Test Form</h1>
+			<h1>HPDF - T91NE1   ||   APIEP - Test Forms</h1>
+			<fieldset>
+				<legend>Signup | Username</legend>
+				<br/>
+			 	<form method="post" action="APIEP_Signup_Username">
+					<input type="text" name="username" placeholder="username">
+	    		<input type="text" name="password" placeholder="password">
+					<input type="submit" value="Submit">
+				</form>
+			</fieldset>
 			<br/>
-		 	<form method="post" action="APIEP_Likes">
-				<input type="text" name="name">
-    		<input type="text" name="email">
-				<input type="submit" value="Submit">
-			</form>
+			<br/>
+			<fieldset>
+				<legend>Login | Username</legend>
+				<br/>
+			 	<form method="post" action="APIEP_Login_Username">
+					<input type="text" name="username" placeholder="username">
+	    		<input type="text" name="password" placeholder="password">
+					<input type="submit" value="Submit">
+				</form>
+			</fieldset>
+			<br/>
+			<br/>
+			<fieldset>
+				<legend>Logout Form</legend>
+				<br/>
+			 	<form method="post" action="APIEP_Logout">
+					<input type="text" name="auth" placeholder="auth_token">
+					<input type="submit" value="Submit">
+				</form>
+			</fieldset>
+			<br/>
+			<br/>
+			<h2>API calls requiring Loggedin auth_token<br/><span style="color:grey;font-size:20px;">(Will implement checking of auth token in extended idea)<span></h2>
+			<fieldset>
+				<legend>Likes Form</legend>
+				<br/>
+			 	<form method="post" action="APIEP_Likes">
+					<input type="text" name="auth_token" placeholder="auth_token" disabled>
+					<input type="text" name="like_user_id" placeholder="like_user_id">
+	    		<input type="text" name="likeby_user_id" placeholder="likeby_user_id">
+					<input type="submit" value="Submit">
+				</form>
+			</fieldset>
 	 </div>
 	</body>
 </html>

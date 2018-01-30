@@ -5,12 +5,13 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var isNumber = require('is-number');
 
+//////////    Setup    //////////
 var app = express();
 var router = express.Router();
+/////////////////////////////////
 
 /// Middleware setup ///
 app.use(cookieParser());
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 //var urlencodedParser = bodyParser.urlencoded({extended:true});
@@ -28,6 +29,7 @@ var url_signup = "https://auth.burled79.hasura-app.io/v1/signup";
 var url_login = "https://auth.burled79.hasura-app.io/v1/login";
 var url_logout = "https://auth.burled79.hasura-app.io/v1/user/logout";
 var url_query = "https://data.burled79.hasura-app.io/v1/query";
+var url_getinfo = "https://auth.burled79.hasura-app.io/v1/user/info";
 ///////////////////////
 
 
@@ -77,9 +79,81 @@ app.get('/JCode.js', function (req, res) {
 
 
 //////////////////     API Endpoints     //////////////////////
+
+app.post('/APIEP_Signup_Username', function(req, res){
+  var username = req.body.username;
+  var password = req.body.password;
+  if (!username.trim() || !password.trim()) {
+    res.send("One or more fields is empty!");
+  } else {
+    Signup_Username(username, password, res);
+  }
+});
+
+app.post('/APIEP_Login_Username', function(req, res){
+  var username = req.body.username;
+  var password = req.body.password;
+  if (!username.trim() || !password.trim()) {
+    res.send("One or more fields is empty!");
+  } else {
+    Login_Username(username, password, res);
+  }
+});
+
+app.post('/APIEP_Logout', function(req, res){
+  var auth = req.body.auth;
+  if (!auth.trim()) {
+    res.send("A valid <b>auth_token</b> must be provided!");
+  } else {
+    Logout(auth, res);
+  }
+});
+
 app.post('/APIEP_Likes', function(req, res){
-  var like_user_id = req.body.name;
-  var likeby_user_id = req.body.email;
+  var like_user_id = req.body.like_user_id;
+  var likeby_user_id = req.body.likeby_user_id;
+
+  if(isNumber(like_user_id) && isNumber(likeby_user_id)){
+    UpdateLikesTable(like_user_id, likeby_user_id, res);
+  } else {
+    res.send("One or more inputs is invalid (Should be numbers)");
+  }
+});
+///////////////////////////////////////////////////////////////
+
+////////////     API Endpoints GET Method    ///////////////////
+app.get('/APIEP_Signup_Username/:username/:password', function(req, res){
+  var username = req.params.username;
+  var password = req.params.password;
+  if (!username.trim() || !password.trim()) {
+    res.send("One or more fields is empty!");
+  } else {
+    Signup_Username(username, password, res);
+  }
+});
+
+app.get('/APIEP_Login_Username/:username/:password', function(req, res){
+  var username = req.params.username;
+  var password = req.params.password;
+  if (!username.trim() || !password.trim()) {
+    res.send("One or more fields is empty!");
+  } else {
+    Login_Username(username, password, res);
+  }
+});
+
+app.get('/APIEP_Logout/:auth_token', function(req, res){
+  var auth = req.params.auth_token;
+  if (!auth.trim()) {
+    res.send("A valid <b>auth_token</b> must be provided!");
+  } else {
+    Logout(auth, res);
+  }
+});
+
+app.get('/APIEP_Likes/:like_user_id/:likeby_user_id', function(req, res){
+  var like_user_id = req.params.like_user_id;
+  var likeby_user_id = req.params.likeby_user_id;
   if(isNumber(like_user_id) && isNumber(likeby_user_id)){
     UpdateLikesTable(like_user_id, likeby_user_id, res);
   } else {
@@ -90,6 +164,32 @@ app.post('/APIEP_Likes', function(req, res){
 
 
 //////////////////////    Hasura API Calls    //////////////////////////
+
+//////    Will implement below function in extended idea    //////
+function Check_AuthToken(auth){
+  var requestOptions = {
+    "method": "GET",
+    "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+auth
+    }
+  };
+
+  fetchAction(url_getinfo, requestOptions)
+  .then(function(response) {
+  	return response.json();
+  })
+  .then(function(result) {
+  	console.log(JSON.stringify(result));
+    return result;
+  })
+  .catch(function(error) {
+  	console.log('Request Failed:' + error);
+    return error;
+  });
+}
+//////////////////////////////////////////////////////////////////
+
 function UpdateLikesTable(like_user_id, likeby_user_id, res){
   console.log(url_query);
   var requestOptions = {
@@ -129,7 +229,68 @@ function UpdateLikesTable(like_user_id, likeby_user_id, res){
   res.send("API Call successfull");
 }
 
+function Login_Username(username, password, res){
+  var requestOptions = {
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json"
+    }
+  };
 
+  var body = {
+      "provider": "username",
+      "data": {
+          "username": username,
+          "password": password
+      }
+  };
+
+  requestOptions.body = JSON.stringify(body);
+
+  fetchAction(url_login, requestOptions)
+  .then(function(response) {
+  	return response.json();
+  })
+  .then(function(result) {
+  	console.log(JSON.stringify(result));
+    res.send(result);
+  })
+  .catch(function(error) {
+  	console.log('Request Failed:' + error);
+  });
+}
+
+function Signup_Username(username, password, res){
+  var requestOptions = {
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json"
+    }
+  };
+
+  var body = {
+      "provider": "username",
+      "data": {
+          "username": username,
+          "password": password
+      }
+  };
+
+  requestOptions.body = JSON.stringify(body);
+
+  fetchAction(url_signup, requestOptions)
+  .then(function(response) {
+  	return response.json();
+  })
+  .then(function(result) {
+  	console.log(JSON.stringify(result));
+    res.send(result);
+  })
+  .catch(function(error) {
+  	console.log('Request Failed:' + error);
+    res.send('Request Failed:' + error);
+  });
+}
 
 // Uncomment to add a new route which returns hello world as a JSON
 // app.get('/json', function(req, res) {
@@ -137,6 +298,7 @@ function UpdateLikesTable(like_user_id, likeby_user_id, res){
 //     message: 'Hello world'
 //   });
 // });
+
 function SignUp(accessToken, res){
   var requestOptions = {
     "method": "POST",
@@ -217,7 +379,7 @@ function Logout(auth, res){
   })
   .then(function(result) {
   	console.log(result);
-    res.send("logged out");
+    res.send(result);
   })
   .catch(function(error) {
   	console.log('Request Failed:' + error);
