@@ -121,7 +121,7 @@ app.post('/APIEP_Likes', function(req, res){
 });
 ///////////////////////////////////////////////////////////////
 
-////////////     API Endpoints GET Method    ///////////////////
+////////////     API Endpoints GET Method    //////////////////
 app.get('/APIEP_Signup_Username/:username/:password', function(req, res){
   var username = req.params.username;
   var password = req.params.password;

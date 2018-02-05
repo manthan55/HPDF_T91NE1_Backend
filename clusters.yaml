@@ -1,7 +1,7 @@
 - alias: hasura
   config:
     configmap: controller-conf
-    namespace: hasura
+    namespace: boat40-hasura
   data: null
-  kubeContext: burled79
-  name: burled79
+  kubeContext: boat40
+  name: boat40
