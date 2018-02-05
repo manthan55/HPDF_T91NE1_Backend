@@ -25,11 +25,11 @@ app.set('views',path.join(__dirname,'views'));
 
 
 /// URL Definitions ///
-var url_signup = "https://auth.burled79.hasura-app.io/v1/signup";
-var url_login = "https://auth.burled79.hasura-app.io/v1/login";
-var url_logout = "https://auth.burled79.hasura-app.io/v1/user/logout";
-var url_query = "https://data.burled79.hasura-app.io/v1/query";
-var url_getinfo = "https://auth.burled79.hasura-app.io/v1/user/info";
+var url_signup = "https://auth.boat40.hasura-app.io/v1/signup";
+var url_login = "https://auth.boat40.hasura-app.io/v1/login";
+var url_logout = "https://auth.boat40.hasura-app.io/v1/user/logout";
+var url_query = "https://data.boat40.hasura-app.io/v1/query";
+var url_getinfo = "https://auth.boat40.hasura-app.io/v1/user/info";
 ///////////////////////
 
 
