@@ -1,4 +1,4 @@
-- alias: boat
+- alias: hasura
   config:
     configmap: controller-conf
     namespace: boat40-hasura
