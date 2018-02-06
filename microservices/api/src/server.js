@@ -332,7 +332,7 @@ function UploadPP(image, res){
   })
   .then(function(result) {
   	console.log(result);
-    UpdateUsersTablePP(result.hasura_id, result.file_id, res);
+    UpdateUsersTablePP(result.hasura_id, result.file_id, res, result);
   })
   .catch(function(error) {
   	console.log('Request Failed:' + error);
@@ -340,7 +340,7 @@ function UploadPP(image, res){
 }
 
 
-function UpdateUsersTablePP(hasura_id, image, res){
+function UpdateUsersTablePP(hasura_id, image, res, prev_result){
   var requestOptions = {
     "method": "POST",
     "headers": {
@@ -372,7 +372,7 @@ function UpdateUsersTablePP(hasura_id, image, res){
   })
   .then(function(result) {
   	console.log(result);
-    res.send(result);
+    res.send(prev_result);
   })
   .catch(function(error) {
   	console.log('Request Failed:' + error);
