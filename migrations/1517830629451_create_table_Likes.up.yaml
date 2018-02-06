@@ -1,0 +1,7 @@
+- args:
+    sql: CREATE TABLE "Likes"("prim_key" integer NOT NULL, "like_user_id" integer
+      NOT NULL, "likeby_user_id" integer NOT NULL, PRIMARY KEY ("prim_key") )
+  type: run_sql
+- args:
+    name: Likes
+  type: add_existing_table_or_view

@@ -55,6 +55,30 @@
 				</form>
 				<pre><b>GET Request :</b> https://api.boat40.hasura-app.io/APIEP_Likes/<b>&ltlike_user_id&gt</b>/<b>&ltlikeby_user_id&gt</b></pre>
 			</fieldset>
+			<br/>
+			<br/>
+			<fieldset>
+				<legend>Match is Present Form</legend>
+				<br/>
+				<form method="post" action="APIEP_Match">
+					<input type="text" name="like_user_id" placeholder="like_user_id" value="40">
+	    		<input type="text" name="likeby_user_id" placeholder="likeby_user_id" value="25">
+					<input type="submit" value="Submit">
+				</form>
+				<pre><b>GET Request :</b> https://api.boat40.hasura-app.io/APIEP_Match/<b>&ltlike_user_id&gt</b>/<b>&ltlikeby_user_id&gt</b></pre>
+			</fieldset>
+			<br/>
+			<br/>
+			<fieldset>
+				<legend>Profile Pic Upload</legend>
+				<br/>
+				<form method="post" action="APIEP_PP">
+					<input type="file" name="image" accept="image/*">
+					<input type="submit" value="Submit">
+				</form>
+				<img src='https://filestore.boat40.hasura-app.io/v1/file/112f9731-c0ff-45eb-8734-0ab5d5807cba' />
+				<pre><b>GET Request :</b> https://api.boat40.hasura-app.io/APIEP_Match/<b>&ltlike_user_id&gt</b>/<b>&ltlikeby_user_id&gt</b></pre>
+			</fieldset>
 	 </div>
 	</body>
 </html>

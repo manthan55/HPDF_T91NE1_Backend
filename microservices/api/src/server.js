@@ -30,6 +30,7 @@ var url_login = "https://auth.boat40.hasura-app.io/v1/login";
 var url_logout = "https://auth.boat40.hasura-app.io/v1/user/logout";
 var url_query = "https://data.boat40.hasura-app.io/v1/query";
 var url_getinfo = "https://auth.boat40.hasura-app.io/v1/user/info";
+var url_file_upload = "https://filestore.boat40.hasura-app.io/v1/file";
 ///////////////////////
 
 
@@ -119,6 +120,23 @@ app.post('/APIEP_Likes', function(req, res){
     res.send("One or more inputs is invalid (Should be numbers)");
   }
 });
+
+app.post('/APIEP_Match', function(req, res){
+  var like_user_id = req.body.like_user_id;
+  var likeby_user_id = req.body.likeby_user_id;
+
+  if(isNumber(like_user_id) && isNumber(likeby_user_id)){
+    Match_is_present(like_user_id, likeby_user_id, res);
+  } else {
+    res.send("One or more inputs is invalid (Should be numbers)");
+  }
+});
+
+app.post('/APIEP_PP', function(req, res){
+  var image = req.body.image;
+  console.log(image);
+  UploadPP(image, res);
+});
 ///////////////////////////////////////////////////////////////
 
 ////////////     API Endpoints GET Method    //////////////////
@@ -160,6 +178,16 @@ app.get('/APIEP_Likes/:like_user_id/:likeby_user_id', function(req, res){
     res.send("One or more inputs is invalid (Should be numbers)");
   }
 });
+
+app.get('/APIEP_Match/:like_user_id/:likeby_user_id', function(req, res){
+  var like_user_id = req.params.like_user_id;
+  var likeby_user_id = req.params.likeby_user_id;
+  if(isNumber(like_user_id) && isNumber(likeby_user_id)){
+    Match_is_present(like_user_id, likeby_user_id, res);
+  } else {
+    res.send("One or more inputs is invalid (Should be numbers)");
+  }
+});
 ///////////////////////////////////////////////////////////////
 
 
@@ -196,7 +224,7 @@ function UpdateLikesTable(like_user_id, likeby_user_id, res){
     "method": "POST",
     "headers": {
         "Content-Type": "application/json",
-        "Authorization": "Bearer b6236ecfc217c9ba326d363560d774d5737e78f24532673c"
+        "Authorization": "Bearer 6820ea7f878a847624818f78081df55e9791ae18bcc67b4b"
     }
   };
 
@@ -228,6 +256,136 @@ function UpdateLikesTable(like_user_id, likeby_user_id, res){
   });
   res.send("API Call successfull");
 }
+
+
+function Match_is_present(like_user_id, likeby_user_id, res){
+  console.log("function match present called");
+  var requestOptions = {
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer 6820ea7f878a847624818f78081df55e9791ae18bcc67b4b"
+      }
+  };
+
+  var body = {
+      "type": "select",
+      "args": {
+          "table": "Likes",
+          "columns": [
+              "prim_key"
+          ],
+          "where": {
+              "$and": [
+                  {
+                      "like_user_id": {
+                          "$eq": likeby_user_id
+                      }
+                  },
+                  {
+                      "likeby_user_id": {
+                          "$eq": like_user_id
+                      }
+                  }
+              ]
+          }
+      }
+  };
+
+  requestOptions.body = JSON.stringify(body);
+
+  fetchAction(url_query, requestOptions)
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(result) {
+    console.log(result.length);
+    if(result.length!=0){
+      //insertmatch(User_id,likedBy_user_id,auth,res);
+      console.log("insert match called");
+    }
+    else {
+      console.log(result);
+    }
+    console.log(result);
+    res.send(result);
+  })
+  .catch(function(error) {
+    console.log('Request Failed :' + error);
+
+  });
+}
+
+
+function UploadPP(image, res){
+  var requestOptions = {
+  	method: 'POST',
+    headers: {
+      "Authorization": "Bearer 6820ea7f878a847624818f78081df55e9791ae18bcc67b4b"
+	   },
+  	body: image
+  }
+
+  fetchAction(url_file_upload, requestOptions)
+  .then(function(response) {
+  	return response.json();
+  })
+  .then(function(result) {
+  	console.log(result);
+    UpdateUsersTablePP(result.hasura_id, result.file_id, res);
+  })
+  .catch(function(error) {
+  	console.log('Request Failed:' + error);
+  });
+}
+
+
+function UpdateUsersTablePP(hasura_id, image, res){
+  var requestOptions = {
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer 6820ea7f878a847624818f78081df55e9791ae18bcc67b4b"
+    }
+  };
+
+  var body = {
+      "type": "update",
+      "args": {
+          "table": "Users",
+          "where": {
+              "id": {
+                  "$eq": hasura_id
+              }
+          },
+          "$set": {
+              "fileid": image
+          }
+      }
+  };
+
+  requestOptions.body = JSON.stringify(body);
+
+  fetchAction(url_query, requestOptions)
+  .then(function(response) {
+  	return response.json();
+  })
+  .then(function(result) {
+  	console.log(result);
+    res.send(result);
+  })
+  .catch(function(error) {
+  	console.log('Request Failed:' + error);
+  });
+}
+
+
+
+
+
+
+
+
 
 function Login_Username(username, password, res){
   var requestOptions = {
@@ -284,7 +442,7 @@ function Signup_Username(username, password, res){
   })
   .then(function(result) {
   	console.log(JSON.stringify(result));
-    res.send(result);
+    UpdateUsersTable(result.hasura_id, res);
   })
   .catch(function(error) {
   	console.log('Request Failed:' + error);
@@ -292,6 +450,42 @@ function Signup_Username(username, password, res){
   });
 }
 
+function UpdateUsersTable(hasura_id, res){
+  var requestOptions = {
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer 6820ea7f878a847624818f78081df55e9791ae18bcc67b4b"
+    }
+  };
+
+  var body = {
+      "type": "insert",
+      "args": {
+          "table": "Users",
+          "objects": [
+              {
+                  "id": hasura_id,
+                  "fileid": "null"
+              }
+          ]
+      }
+  };
+
+  requestOptions.body = JSON.stringify(body);
+
+  fetchAction(url_query, requestOptions)
+  .then(function(response) {
+  	return response.json();
+  })
+  .then(function(result) {
+  	console.log(result);
+    res.send(result);
+  })
+  .catch(function(error) {
+  	console.log('Request Failed:' + error);
+  });
+}
 // Uncomment to add a new route which returns hello world as a JSON
 // app.get('/json', function(req, res) {
 //   res.json({

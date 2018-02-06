@@ -1,0 +1,4 @@
+- args:
+    role: anonymous
+    table: Likes
+  type: drop_update_permission

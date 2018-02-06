@@ -1,0 +1,10 @@
+- args:
+    permission:
+      columns:
+      - prim_key
+      - like_user_id
+      - likeby_user_id
+      filter: {}
+    role: anonymous
+    table: Likes
+  type: create_update_permission
