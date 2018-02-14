@@ -169,7 +169,7 @@ app.post('/APIEP_PP', upload.any(), function(req, res, next){
 
 app.post('/APIEP_Logger', function(req, res){
   console.log("console logged incoming request");
-  console.log(req.body);
+  console.log(req.file);
   res.send("received");
 });
 ///////////////////////////////////////////////////////////////
