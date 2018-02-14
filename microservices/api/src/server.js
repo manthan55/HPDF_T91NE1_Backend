@@ -164,7 +164,7 @@ app.post('/APIEP_PP', upload.any(), function(req, res, next){
   //var imge=fs.readFileSync(req.file.destination+’/’+imgpath);
   var image=fs.readFileSync(req.files[0].destination+'/'+imagePath);
   var imageType = req.files[0].mimetype;
-  console.log(req.body.user_id);
+  console.log(req.files[0].name);
   UploadPP(image, imageType, res);
 });
 
