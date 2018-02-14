@@ -4,6 +4,19 @@ var fetchAction =  require('node-fetch');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var isNumber = require('is-number');
+var multer  = require('multer');
+var fs = require("fs");
+var imagePath;
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    imagePath = Date.now() + path.extname(file.originalname);
+    cb(null, imagePath) //Appending .jpg
+  }
+})
+var upload = multer({ storage: storage });
 
 //////////    Setup    //////////
 var app = express();
@@ -132,10 +145,31 @@ app.post('/APIEP_Match', function(req, res){
   }
 });
 
-app.post('/APIEP_PP', function(req, res){
-  var image = req.body.image;
-  console.log(image);
-  UploadPP(image, res);
+app.post('/APIEP_PP', upload.any(), function(req, res, next){
+  //res.send(req.files[0].filename);
+  //test("ddata");
+  //var image = req.body.image;
+  //console.log(image);
+  /*
+  var test = true;
+  while(test){
+    if(req.files[0].filename){
+      test = false;
+      var image = 'uploads/'+req.files[0].filename+'';
+    }
+  }
+  */
+  //res.send(image);
+  //UploadPP(image, res);
+  //var imge=fs.readFileSync(req.file.destination+’/’+imgpath);
+  var image=fs.readFileSync(req.files[0].destination+'/'+imagePath);
+  var imageType = req.files[0].mimetype;
+  UploadPP(image, imageType, res);
+});
+
+app.post('/APIEP_Logger', function(req, res){
+  console.log("console logged incoming request");
+  res.send("received");
 });
 ///////////////////////////////////////////////////////////////
 
@@ -317,29 +351,6 @@ function Match_is_present(like_user_id, likeby_user_id, res){
 }
 
 
-function UploadPP(image, res){
-  var requestOptions = {
-  	method: 'POST',
-    headers: {
-      "Authorization": "Bearer 6820ea7f878a847624818f78081df55e9791ae18bcc67b4b"
-	   },
-  	body: image
-  }
-
-  fetchAction(url_file_upload, requestOptions)
-  .then(function(response) {
-  	return response.json();
-  })
-  .then(function(result) {
-  	console.log(result);
-    UpdateUsersTablePP(result.hasura_id, result.file_id, res, result);
-  })
-  .catch(function(error) {
-  	console.log('Request Failed:' + error);
-  });
-}
-
-
 function UpdateUsersTablePP(hasura_id, image, res, prev_result){
   var requestOptions = {
     "method": "POST",
@@ -379,7 +390,28 @@ function UpdateUsersTablePP(hasura_id, image, res, prev_result){
   });
 }
 
+function UploadPP(image, imageType, res){
+  var requestOptions = {
+  	method: 'POST',
+  	headers: {
+        "Authorization": "Bearer a4d5300e57df6d1e699d021f6fc680e4e932f76625788483",
+        "content-type" : imageType
+  	},
+  	body: image
+  }
 
+  fetchAction(url_file_upload, requestOptions)
+  .then(function(response) {
+  	return response.json();
+  })
+  .then(function(result) {
+  	console.log(result);
+    res.send(result);
+  })
+  .catch(function(error) {
+  	console.log('Request Failed:' + error);
+  });
+}
 
 
 
