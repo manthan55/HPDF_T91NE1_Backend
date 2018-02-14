@@ -93,7 +93,6 @@ app.get('/JCode.js', function (req, res) {
 
 
 //////////////////     API Endpoints     //////////////////////
-
 app.post('/APIEP_Signup_Username', function(req, res){
   var username = req.body.username;
   var password = req.body.password;
@@ -146,28 +145,14 @@ app.post('/APIEP_Match', function(req, res){
 });
 
 app.post('/APIEP_PP', upload.any(), function(req, res, next){
-  //res.send(req.files[0].filename);
-  //test("ddata");
-  //var image = req.body.image;
-  //console.log(image);
-  /*
-  var test = true;
-  while(test){
-    if(req.files[0].filename){
-      test = false;
-      var image = 'uploads/'+req.files[0].filename+'';
-    }
-  }
-  */
-  //res.send(image);
-  //UploadPP(image, res);
-  //var imge=fs.readFileSync(req.file.destination+’/’+imgpath);
   var image=fs.readFileSync(req.files[0].destination+'/'+imagePath);
   var imageType = req.files[0].mimetype;
-  console.log("req.body.user_auth_token : " + req.body.user_auth_token);
-  console.log("req.body.user_id : " + req.body.user_id);
   var auth_token = req.body.user_auth_token;
-  UploadPP(image, imageType, auth_token, res);
+  if(!auth_token.trim()){
+    res.send("Invalid Auth Token");
+  } else {
+    UploadPP(image, imageType, auth_token, res);
+  }
 });
 
 app.post('/APIEP_Logger', function(req, res){
@@ -355,12 +340,12 @@ function Match_is_present(like_user_id, likeby_user_id, res){
 }
 
 
-function UpdateUsersTablePP(hasura_id, image, res, prev_result){
+function UpdateUsersTablePP(hasura_id, file_id, res, prev_result){
   var requestOptions = {
     "method": "POST",
     "headers": {
         "Content-Type": "application/json",
-        "Authorization": "Bearer 6820ea7f878a847624818f78081df55e9791ae18bcc67b4b"
+        "Authorization": "Bearer a4d5300e57df6d1e699d021f6fc680e4e932f76625788483"
     }
   };
 
@@ -374,7 +359,7 @@ function UpdateUsersTablePP(hasura_id, image, res, prev_result){
               }
           },
           "$set": {
-              "fileid": image
+              "fileid": file_id
           }
       }
   };
@@ -410,7 +395,7 @@ function UploadPP(image, imageType, auth_token, res){
   })
   .then(function(result) {
   	console.log(result);
-    res.send(result);
+    UpdateUsersTablePP(result.user_id, result.file_id, res, result);
   })
   .catch(function(error) {
   	console.log('Request Failed:' + error);
