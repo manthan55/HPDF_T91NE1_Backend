@@ -166,7 +166,8 @@ app.post('/APIEP_PP', upload.any(), function(req, res, next){
   var imageType = req.files[0].mimetype;
   console.log("req.body.user_auth_token : " + req.body.user_auth_token);
   console.log("req.body.user_id : " + req.body.user_id);
-  UploadPP(image, imageType, res);
+  var auth_token = req.body.user_auth_token;
+  UploadPP(image, imageType, auth_token, res);
 });
 
 app.post('/APIEP_Logger', function(req, res){
@@ -393,11 +394,11 @@ function UpdateUsersTablePP(hasura_id, image, res, prev_result){
   });
 }
 
-function UploadPP(image, imageType, res){
+function UploadPP(image, imageType, auth_token, res){
   var requestOptions = {
   	method: 'POST',
   	headers: {
-        "Authorization": "Bearer a4d5300e57df6d1e699d021f6fc680e4e932f76625788483",
+        "Authorization": "Bearer "+auth_token,
         "content-type" : imageType
   	},
   	body: image
