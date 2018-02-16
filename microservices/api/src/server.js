@@ -21,6 +21,7 @@ var upload = multer({ storage: storage });
 //////////    Setup    //////////
 var app = express();
 var router = express.Router();
+var server = require('http').Server(app);
 /////////////////////////////////
 
 /// Middleware setup ///
@@ -30,11 +31,14 @@ app.use(bodyParser.json());
 //var urlencodedParser = bodyParser.urlencoded({extended:true});
 ////////////////////////
 
+// if errors occur, uncomment line 35 and comment line 24
+//var server = require('http').Server(app);
 
-var server = require('http').Server(app);
 
+/// View Engine EJS Setup ///
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
+/////////////////////////////
 
 
 /// URL Definitions ///
